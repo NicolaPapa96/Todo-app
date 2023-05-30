@@ -1,23 +1,39 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import TodoForm from "./components/TodoForm";
+import TodoList from "./components/TodoList";
+import Quote from "./components/Quote";
+import { useState, useEffect } from "react";
+import axios from "axios";
 
 function App() {
+  const [todo, setTodo] = useState("");
+  const [todos, setTodos] = useState([]);
+
+  const addTodo = () => {
+    if (todos.includes(todo)) {
+      setTodo("");
+      return;
+    }
+    if (todo !== null && todo.length > 0) {
+      setTodos([...todos, todo]);
+      setTodo("");
+    }
+  };
+
+  const removeTodo = (value) => {
+    const newTodos = todos.filter((todo) => {
+      return todo !== value;
+    });
+    setTodos(newTodos);
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="bg-image">
+      <div className="todo-container">
+        <TodoForm todo={todo} setTodo={setTodo} addTodo={addTodo} />
+        <TodoList list={todos} remove={removeTodo} />
+      </div>
+      <Quote />
     </div>
   );
 }
